@@ -56,7 +56,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   return (
     <>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorSchemeProvider
           colorScheme={colorScheme}

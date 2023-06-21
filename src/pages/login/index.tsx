@@ -1,4 +1,4 @@
-import { AuthPage } from "@refinedev/mantine";
+import { AuthPage } from "@components/pages/auth";
 
 import { GetServerSideProps } from "next";
 import { authProvider } from "src/authProvider";
@@ -10,6 +10,10 @@ export default function Login() {
       formProps={{
         initialValues: { email: "demo@refine.dev", password: "demodemo" },
       }}
+      title={<></>}
+      registerLink={<></>}
+      rememberMe={<></>}
+      forgotPasswordLink={<></>}
     />
   );
 }
