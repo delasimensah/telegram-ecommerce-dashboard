@@ -1,10 +1,10 @@
-import { MantineShowInferencer } from "@refinedev/inferencer/mantine";
+import React from "react";
 import { GetServerSideProps } from "next";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "@lib/authProvider";
 
-export default function CategoryShow() {
-  return <MantineShowInferencer />;
-}
+const ShowCategory = () => {
+  return <div>ShowCategory</div>;
+};
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     return {
       props: {},
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
+        destination: redirectTo,
         permanent: false,
       },
     };
@@ -23,3 +23,5 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     props: {},
   };
 };
+
+export default ShowCategory;

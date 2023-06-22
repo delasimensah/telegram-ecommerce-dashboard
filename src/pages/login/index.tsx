@@ -1,14 +1,14 @@
 import { AuthPage } from "@components/pages/auth";
 
 import { GetServerSideProps } from "next";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "@lib/authProvider";
 
 export default function Login() {
   return (
     <AuthPage
       type="login"
       formProps={{
-        initialValues: { email: "demo@refine.dev", password: "demodemo" },
+        initialValues: { email: "admin@bot.com", password: "BotAdmin!!" },
       }}
       title={<></>}
       registerLink={<></>}

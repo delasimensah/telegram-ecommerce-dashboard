@@ -2,8 +2,8 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { authProvider } from "@lib/authProvider";
 
-const ListCategories = () => {
-  return <div>Category List</div>;
+const ListUsers = () => {
+  return <div>ListUsers</div>;
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -24,4 +24,4 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   };
 };
 
-export default ListCategories;
+export default ListUsers;

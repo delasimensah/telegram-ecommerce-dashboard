@@ -1,6 +1,6 @@
 import { ErrorComponent } from "@refinedev/mantine";
 import { GetServerSideProps } from "next";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "src/lib/authProvider";
 
 export default function CatchAll() {
   return <ErrorComponent />;

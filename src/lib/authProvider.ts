@@ -1,5 +1,7 @@
 import { AuthBindings } from "@refinedev/core";
 import nookies from "nookies";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "./firebase/config";
 
 const mockUsers = [
   {
@@ -17,15 +19,17 @@ const mockUsers = [
 ];
 
 export const authProvider: AuthBindings = {
-  login: async ({ email, username, password, remember }) => {
-    // Suppose we actually send a request to the back end here.
-    const user = mockUsers[0];
+  login: async ({ email, password }) => {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    if (user) {
-      nookies.set(null, "auth", JSON.stringify(user), {
+    const token = await user.getIdToken();
+
+    if (token) {
+      nookies.set(null, "token", JSON.stringify(token), {
         maxAge: 30 * 24 * 60 * 60,
         path: "/",
       });
+
       return {
         success: true,
         redirectTo: "/",
@@ -41,7 +45,9 @@ export const authProvider: AuthBindings = {
     };
   },
   logout: async () => {
-    nookies.destroy(null, "auth");
+    await signOut(auth);
+    nookies.destroy(null, "token");
+
     return {
       success: true,
       redirectTo: "/login",
@@ -49,7 +55,8 @@ export const authProvider: AuthBindings = {
   },
   check: async (ctx: any) => {
     const cookies = nookies.get(ctx);
-    if (cookies["auth"]) {
+
+    if (cookies["token"]) {
       return {
         authenticated: true,
       };
@@ -62,23 +69,24 @@ export const authProvider: AuthBindings = {
     };
   },
   getPermissions: async () => {
-    const auth = nookies.get()["auth"];
-    if (auth) {
-      const parsedUser = JSON.parse(auth);
-      return parsedUser.roles;
-    }
+    // const auth = nookies.get()["token"];
+    // if (auth) {
+    //   const parsedUser = JSON.parse(auth);
+    //   return parsedUser.roles;
+    // }
     return null;
   },
   getIdentity: async () => {
-    const auth = nookies.get()["auth"];
-    if (auth) {
-      const parsedUser = JSON.parse(auth);
-      return parsedUser;
-    }
+    // const auth = nookies.get()["auth"];
+    // if (auth) {
+    //   const parsedUser = JSON.parse(auth);
+    //   return parsedUser;
+    // }
     return null;
   },
   onError: async (error) => {
-    console.error(error);
+    // console.error(error.message);
+    // console.log(error.message);
     return { error };
   },
 };

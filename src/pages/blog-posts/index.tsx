@@ -1,6 +1,6 @@
 import { MantineListInferencer } from "@refinedev/inferencer/mantine";
 import { GetServerSideProps } from "next";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "src/lib/authProvider";
 
 export default function BlogPostList() {
   return <MantineListInferencer />;

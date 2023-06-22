@@ -1,4 +1,5 @@
-import { GitHubBanner, Refine } from "@refinedev/core";
+import { FC, useState, useEffect } from "react";
+import { Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   RefineThemes,
@@ -18,11 +19,14 @@ import {
   ColorSchemeProvider,
   Global,
   MantineProvider,
+  Title,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@refinedev/simple-rest";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "@lib/authProvider";
+
+import { FaUsers, FaTags, FaInbox } from "react-icons/fa";
 
 const API_URL = "https://api.fake-rest.refine.dev";
 
@@ -34,14 +38,23 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
+const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
+  const [isSSR, setIsSSR] = useState(true);
+
+  useEffect(() => {
+    setIsSSR(false);
+  }, []);
+
   const renderComponent = () => {
     if (Component.noLayout) {
       return <Component {...pageProps} />;
     }
 
     return (
-      <ThemedLayoutV2 Header={() => <Header sticky />}>
+      <ThemedLayoutV2
+        Title={() => <Title order={4}>Bot Frontend</Title>}
+        Header={() => <Header sticky />}
+      >
         <Component {...pageProps} />
       </ThemedLayoutV2>
     );
@@ -52,66 +65,122 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     defaultValue: "light",
     getInitialValueInEffect: true,
   });
+
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  if (isSSR) return null;
+
   return (
-    <>
-      <RefineKbarProvider>
-        <ColorSchemeProvider
-          colorScheme={colorScheme}
-          toggleColorScheme={toggleColorScheme}
+    <RefineKbarProvider>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          theme={{ ...RefineThemes.Magenta, colorScheme: colorScheme }}
+          withNormalizeCSS
+          withGlobalStyles
         >
-          {/* You can change the theme colors here. example: theme={{ ...RefineThemes.Magenta, colorScheme:colorScheme }} */}
-          <MantineProvider
-            theme={{ ...RefineThemes.Blue, colorScheme: colorScheme }}
-            withNormalizeCSS
-            withGlobalStyles
-          >
-            <Global styles={{ body: { WebkitFontSmoothing: "auto" } }} />
-            <NotificationsProvider position="top-right">
-              <Refine
-                routerProvider={routerProvider}
-                dataProvider={dataProvider(API_URL)}
-                notificationProvider={notificationProvider}
-                authProvider={authProvider}
-                resources={[
-                  {
-                    name: "blog_posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
+          <Global styles={{ body: { WebkitFontSmoothing: "auto" } }} />
+
+          <NotificationsProvider position="top-right">
+            <Refine
+              routerProvider={routerProvider}
+              dataProvider={dataProvider(API_URL)}
+              notificationProvider={notificationProvider}
+              authProvider={authProvider}
+              resources={[
+                // {
+                //   name: "blog_posts",
+                //   list: "/blog-posts",
+                //   create: "/blog-posts/create",
+                //   edit: "/blog-posts/edit/:id",
+                //   show: "/blog-posts/show/:id",
+                //   meta: {
+                //     canDelete: true,
+                //   },
+                // },
+                // {
+                //   name: "categories",
+                //   list: "/old-categories",
+                //   create: "/old-categories/create",
+                //   edit: "/old-categories/edit/:id",
+                //   show: "/old-categories/show/:id",
+                //   meta: {
+                //     canDelete: true,
+                //   },
+                // },
+                {
+                  name: "products",
+                  list: "/products",
+                  create: "/products/create",
+                  edit: "/products/edit/:id",
+                  show: "/products/show/:id",
+                  meta: {
+                    icon: <FaTags />,
                   },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
+                },
+                {
+                  name: "categories",
+                  list: "/categories",
+                  create: "/categories/create",
+                  edit: "/categories/edit/:id",
+                  show: "/categories/show/:id",
+                  meta: {
+                    canDelete: true,
                   },
-                ]}
-                options={{
-                  syncWithLocation: true,
-                  warnWhenUnsavedChanges: true,
+                },
+                {
+                  name: "users",
+                  list: "/users",
+                  meta: {
+                    icon: <FaUsers />,
+                  },
+                },
+                {
+                  name: "orders",
+                  list: "/orders",
+                  meta: {
+                    icon: <FaInbox />,
+                  },
+                },
+              ]}
+              options={{
+                syncWithLocation: true,
+                warnWhenUnsavedChanges: true,
+                reactQuery: {
+                  devtoolConfig: false,
+                },
+              }}
+            >
+              {renderComponent()}
+
+              <RefineKbar />
+
+              <UnsavedChangesNotifier />
+
+              <DocumentTitleHandler
+                handler={({ pathname, resource }) => {
+                  let title = "Bot Frontend";
+
+                  if (pathname !== "/login") {
+                    title = `${resource?.name
+                      .charAt(0)
+                      .toUpperCase()}${resource?.name.substring(
+                      1
+                    )} | Bot Frontend`;
+                  }
+
+                  return title;
                 }}
-              >
-                {renderComponent()}
-                <RefineKbar />
-                <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
-              </Refine>
-            </NotificationsProvider>
-          </MantineProvider>
-        </ColorSchemeProvider>
-      </RefineKbarProvider>
-    </>
+              />
+            </Refine>
+          </NotificationsProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </RefineKbarProvider>
   );
-}
+};
 
 export default MyApp;

@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
+      "@lib/*": ["src/lib/*"],
       "@public/*": ["public/*"]
     },
     "incremental": true

@@ -1,7 +1,9 @@
 import { NavigateToResource } from "@refinedev/nextjs-router";
 
-export default function Home() {
-  return <NavigateToResource resource="blog_posts" />;
-}
+const Home = () => {
+  return <NavigateToResource resource="products" />;
+};
+
+export default Home;
 
 Home.noLayout = true;

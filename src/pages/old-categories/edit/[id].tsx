@@ -1,10 +1,10 @@
-import React from "react";
+import { MantineEditInferencer } from "@refinedev/inferencer/mantine";
 import { GetServerSideProps } from "next";
-import { authProvider } from "@lib/authProvider";
+import { authProvider } from "src/lib/authProvider";
 
-const ListCategories = () => {
-  return <div>Category List</div>;
-};
+export default function CategoryEdit() {
+  return <MantineEditInferencer />;
+}
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     return {
       props: {},
       redirect: {
-        destination: redirectTo,
+        destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
         permanent: false,
       },
     };
@@ -23,5 +23,3 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     props: {},
   };
 };
-
-export default ListCategories;

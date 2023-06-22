@@ -1,22 +1,19 @@
-import { AuthPage } from "@refinedev/mantine";
-
+import { MantineCreateInferencer } from "@refinedev/inferencer/mantine";
 import { GetServerSideProps } from "next";
-import { authProvider } from "src/authProvider";
+import { authProvider } from "src/lib/authProvider";
 
-export default function ForgotPassword() {
-  return <AuthPage type="forgotPassword" />;
+export default function CategoryCreate() {
+  return <MantineCreateInferencer />;
 }
-
-ForgotPassword.noLayout = true;
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
 
-  if (authenticated) {
+  if (!authenticated) {
     return {
       props: {},
       redirect: {
-        destination: redirectTo ?? "/",
+        destination: `${redirectTo}?to=${encodeURIComponent("/categories")}`,
         permanent: false,
       },
     };
