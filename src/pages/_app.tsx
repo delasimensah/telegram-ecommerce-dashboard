@@ -4,6 +4,7 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   RefineThemes,
   ThemedLayoutV2,
+  ThemedTitleV2,
   notificationProvider,
 } from "@refinedev/mantine";
 import routerProvider, {
@@ -17,7 +18,6 @@ import { Header } from "@components/header";
 import {
   ColorScheme,
   ColorSchemeProvider,
-  Global,
   MantineProvider,
   Title,
 } from "@mantine/core";
@@ -27,6 +27,8 @@ import dataProvider from "@refinedev/simple-rest";
 import { authProvider } from "@lib/authProvider";
 
 import { FaUsers, FaTags, FaInbox } from "react-icons/fa";
+
+import theme from "@lib/mantineTheme";
 
 const API_URL = "https://api.fake-rest.refine.dev";
 
@@ -52,7 +54,9 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
 
     return (
       <ThemedLayoutV2
-        Title={() => <Title order={4}>Bot Frontend</Title>}
+        Title={({ collapsed }) => (
+          <ThemedTitleV2 collapsed={collapsed} text="Bot Frontend" />
+        )}
         Header={() => <Header sticky />}
       >
         <Component {...pageProps} />
@@ -78,12 +82,14 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider
-          theme={{ ...RefineThemes.Magenta, colorScheme: colorScheme }}
+          theme={{
+            ...theme,
+            ...RefineThemes.Magenta,
+            colorScheme: colorScheme,
+          }}
           withNormalizeCSS
           withGlobalStyles
         >
-          <Global styles={{ body: { WebkitFontSmoothing: "auto" } }} />
-
           <NotificationsProvider position="top-right">
             <Refine
               routerProvider={routerProvider}
