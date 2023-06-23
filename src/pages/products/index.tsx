@@ -1,9 +1,10 @@
 import React from "react";
 import { GetServerSideProps } from "next";
+
 import { authProvider } from "@lib/authProvider";
 
 const ListProducts = () => {
-  return <div>Products</div>;
+  return <div>Product List</div>;
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

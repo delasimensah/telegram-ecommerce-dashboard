@@ -19,7 +19,6 @@ import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
-  Title,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
@@ -30,7 +29,12 @@ import { FaUsers, FaTags, FaInbox } from "react-icons/fa";
 
 import theme from "@lib/mantineTheme";
 
-const API_URL = "https://api.fake-rest.refine.dev";
+// const API_URL = "https://api.fake-rest.refine.dev";
+let API_URL = "http://localhost:5001/motive-5fd18/us-central1/gBot/api";
+
+if (process.env.NODE_ENV === "production") {
+  API_URL = "";
+}
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
