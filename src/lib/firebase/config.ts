@@ -1,16 +1,20 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 
 const config = {
-  apiKey: "AIzaSyC9Lb3MBd77BiwXHmDh-8Tw3-sIKRZZvjo",
-  authDomain: "motive-5fd18.firebaseapp.com",
-  projectId: "motive-5fd18",
-  storageBucket: "motive-5fd18.appspot.com",
-  messagingSenderId: "410646108820",
-  appId: "1:410646108820:web:f566c39979a176c2217281",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(config);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+
+if (process.env.NODE_ENV === "development") {
+  connectStorageEmulator(storage, "127.0.0.1", 9199);
+}
