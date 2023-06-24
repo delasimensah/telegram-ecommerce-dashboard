@@ -88,7 +88,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
         <MantineProvider
           theme={{
             ...theme,
-            ...RefineThemes.Magenta,
+            ...RefineThemes.Green,
             colorScheme: colorScheme,
           }}
           withNormalizeCSS

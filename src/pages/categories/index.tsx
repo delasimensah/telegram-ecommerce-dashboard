@@ -55,11 +55,7 @@ const ListCategories = () => {
   }));
 
   return (
-    <List
-      createButtonProps={{
-        variant: "subtle",
-      }}
-    >
+    <List>
       <ScrollArea>
         <Table highlightOnHover striped verticalSpacing="md">
           <thead>

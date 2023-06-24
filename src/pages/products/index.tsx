@@ -1,10 +1,11 @@
 import React from "react";
 import { GetServerSideProps } from "next";
+import { List } from "@refinedev/mantine";
 
 import { authProvider } from "@lib/authProvider";
 
 const ListProducts = () => {
-  return <div>Product List</div>;
+  return <List>Product List</List>;
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
