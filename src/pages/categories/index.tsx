@@ -2,8 +2,16 @@ import { useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef, flexRender } from "@tanstack/react-table";
-import { ScrollArea, Table, Pagination, Group, Switch } from "@mantine/core";
-import { List, EditButton, ShowButton, DeleteButton } from "@refinedev/mantine";
+import {
+  ScrollArea,
+  Table,
+  Pagination,
+  Group,
+  Switch,
+  Center,
+  Title,
+} from "@mantine/core";
+import { List, EditButton, DeleteButton } from "@refinedev/mantine";
 
 import { authProvider } from "@lib/authProvider";
 
@@ -25,12 +33,11 @@ const ListCategories = () => {
       },
       {
         id: "actions",
-        accessorKey: "name",
+        accessorKey: "id",
         header: "Actions",
         cell: function render({ getValue }) {
           return (
             <Group spacing="xs" noWrap>
-              <ShowButton hideText recordItemId={getValue() as string} />
               <EditButton hideText recordItemId={getValue() as string} />
               <DeleteButton hideText recordItemId={getValue() as string} />
             </Group>
@@ -43,70 +50,80 @@ const ListCategories = () => {
   const {
     getHeaderGroups,
     getRowModel,
-    setOptions,
-    refineCore: { pageCount, current, setCurrent },
+    refineCore: {
+      pageCount,
+      current,
+      setCurrent,
+      tableQueryResult: { data },
+    },
   } = useTable({ columns });
 
-  setOptions((prev) => ({
-    ...prev,
-    meta: {
-      ...prev.data,
-    },
-  }));
+  const categories = data?.data ?? [];
+  // const total = data?.total ?? 0;
 
   return (
     <List>
-      <ScrollArea>
-        <Table highlightOnHover striped verticalSpacing="md">
-          <thead>
-            {getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <th key={header.id}>
-                        {!header.isPlaceholder &&
-                          flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </thead>
+      {categories.length ? (
+        <>
+          <ScrollArea>
+            <Table highlightOnHover striped verticalSpacing="md">
+              <thead>
+                {getHeaderGroups().map((headerGroup) => {
+                  return (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <th key={header.id}>
+                            {!header.isPlaceholder &&
+                              flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </thead>
 
-          <tbody>
-            {getRowModel().rows.map((row) => {
-              return (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </ScrollArea>
+              <tbody>
+                {getRowModel().rows.map((row) => {
+                  return (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <td key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </ScrollArea>
 
-      <br />
+          <br />
 
-      <Pagination
-        position="right"
-        total={pageCount}
-        page={current}
-        onChange={setCurrent}
-      />
+          <Pagination
+            position="right"
+            total={pageCount}
+            page={current}
+            onChange={setCurrent}
+          />
+        </>
+      ) : (
+        <Center mih="150px">
+          <Title order={4} fw={700}>
+            No Categories Available.
+          </Title>
+        </Center>
+      )}
     </List>
   );
 };
@@ -130,11 +147,3 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 };
 
 export default ListCategories;
-
-{
-  /* <div>
-      {categories?.map((category) => {
-        return <p key={category.name}>{category.name}</p>;
-      })}
-    </div> */
-}

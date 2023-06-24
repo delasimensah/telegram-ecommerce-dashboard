@@ -19,11 +19,7 @@ const CreateCategory = () => {
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
-      <TextInput
-        placeholder="Category Name"
-        mt="sm"
-        {...getInputProps("name")}
-      />
+      <TextInput label="Category Name" mt="sm" {...getInputProps("name")} />
     </Create>
   );
 };

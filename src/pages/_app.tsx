@@ -101,32 +101,11 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
               notificationProvider={notificationProvider}
               authProvider={authProvider}
               resources={[
-                // {
-                //   name: "blog_posts",
-                //   list: "/blog-posts",
-                //   create: "/blog-posts/create",
-                //   edit: "/blog-posts/edit/:id",
-                //   show: "/blog-posts/show/:id",
-                //   meta: {
-                //     canDelete: true,
-                //   },
-                // },
-                // {
-                //   name: "categories",
-                //   list: "/old-categories",
-                //   create: "/old-categories/create",
-                //   edit: "/old-categories/edit/:id",
-                //   show: "/old-categories/show/:id",
-                //   meta: {
-                //     canDelete: true,
-                //   },
-                // },
                 {
                   name: "products",
                   list: "/products",
                   create: "/products/create",
                   edit: "/products/edit/:id",
-                  show: "/products/show/:id",
                   meta: {
                     icon: <FaTags />,
                   },
@@ -136,7 +115,6 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
                   list: "/categories",
                   create: "/categories/create",
                   edit: "/categories/edit/:id",
-                  show: "/categories/show/:id",
                   meta: {
                     canDelete: true,
                   },

@@ -24,7 +24,6 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const CreateProduct = () => {
   const [progress, setProgress] = useState(0);
-  const [error, setError] = useState("");
 
   const {
     getInputProps,

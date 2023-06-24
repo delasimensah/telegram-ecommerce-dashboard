@@ -1,4 +1,4 @@
-import { AuthPage } from "@components/pages/auth";
+import { AuthPage } from "@refinedev/mantine";
 
 import { GetServerSideProps } from "next";
 import { authProvider } from "@lib/authProvider";
