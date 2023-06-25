@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 
 const config = {
@@ -16,5 +16,6 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 
 if (process.env.NODE_ENV === "development") {
+  connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
