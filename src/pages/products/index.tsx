@@ -87,11 +87,11 @@ const ListProducts = () => {
 
           return value ? (
             <Badge color="green">
-              <Text tt="capitalize">True</Text>
+              <Text tt="lowercase">True</Text>
             </Badge>
           ) : (
             <Badge color="red">
-              <Text tt="capitalize">False</Text>
+              <Text tt="lowercase">False</Text>
             </Badge>
           );
         },

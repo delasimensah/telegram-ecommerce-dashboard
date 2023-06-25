@@ -28,7 +28,7 @@ import { FaUsers, FaTags, FaInbox } from "react-icons/fa";
 
 import theme from "@lib/mantineTheme";
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
