@@ -58,7 +58,7 @@ const ListCategories = () => {
   isError && <Error />;
 
   return (
-    <List canCreate={false}>
+    <List>
       {!categories.length ? (
         <Empty text="no categories available" />
       ) : (

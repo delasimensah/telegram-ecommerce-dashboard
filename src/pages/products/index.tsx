@@ -108,7 +108,7 @@ const ListProducts = () => {
   isError && <Error />;
 
   return (
-    <List canCreate={false}>
+    <List>
       {!products.length ? (
         <Empty text="no products available" />
       ) : (

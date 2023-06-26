@@ -1,5 +1,4 @@
 import { FC } from "react";
-
 import {
   ActionIcon,
   Avatar,
@@ -8,29 +7,20 @@ import {
   Header as MantineHeader,
   Sx,
   Title,
-  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { useGetIdentity } from "@refinedev/core";
 import {
   HamburgerMenu,
   RefineThemedLayoutV2HeaderProps,
 } from "@refinedev/mantine";
 import { IconMoonStars, IconSun } from "@tabler/icons";
 
-type IUser = {
-  id: number;
-  name: string;
-  avatar: string;
-};
+import { useDark } from "@lib/hooks";
 
 const Header: FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
-  const { data: user } = useGetIdentity<IUser>();
-
   const theme = useMantineTheme();
 
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark, toggleColorScheme } = useDark();
 
   const borderColor = dark ? theme.colors.dark[6] : theme.colors.gray[2];
 
@@ -65,7 +55,7 @@ const Header: FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 
         <Group>
           <ActionIcon
-            variant="outline"
+            variant="subtle"
             color={dark ? "yellow" : "primary"}
             onClick={() => toggleColorScheme()}
             title="Toggle color scheme"
@@ -75,9 +65,9 @@ const Header: FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 
           <Group spacing="xs">
             <Avatar color="cyan" radius="xl">
-              BA
+              A
             </Avatar>
-            <Title order={6}>Bot Administrator</Title>
+            <Title order={6}>Administrator</Title>
           </Group>
         </Group>
       </Flex>
