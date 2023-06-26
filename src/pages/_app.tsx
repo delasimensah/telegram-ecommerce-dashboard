@@ -13,7 +13,7 @@ import routerProvider, {
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
 
-import { Header } from "@components/header";
+import { Header } from "@components";
 import {
   ColorScheme,
   ColorSchemeProvider,

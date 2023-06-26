@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import {
   ActionIcon,
   Avatar,
@@ -15,7 +17,6 @@ import {
   RefineThemedLayoutV2HeaderProps,
 } from "@refinedev/mantine";
 import { IconMoonStars, IconSun } from "@tabler/icons";
-import React from "react";
 
 type IUser = {
   id: number;
@@ -23,9 +24,7 @@ type IUser = {
   avatar: string;
 };
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
-  sticky,
-}) => {
+const Header: FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
   const { data: user } = useGetIdentity<IUser>();
 
   const theme = useMantineTheme();
@@ -85,3 +84,5 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     </MantineHeader>
   );
 };
+
+export default Header;
