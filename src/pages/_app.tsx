@@ -53,7 +53,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
     return (
       <ThemedLayoutV2
         Title={({ collapsed }) => (
-          <ThemedTitleV2 collapsed={collapsed} text="Bot Frontend" />
+          <ThemedTitleV2 collapsed={collapsed} text="Bot Dashboard" />
         )}
         Header={() => <Header sticky />}
       >
@@ -80,8 +80,8 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
     >
       <MantineProvider
         theme={{
-          ...theme,
           ...RefineThemes.Green,
+          ...theme,
           colorScheme: colorScheme,
         }}
         withNormalizeCSS
@@ -135,14 +135,14 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
               },
             }}
           >
-            {renderComponent()}
+            <DefaultSeo
+              title="Bot Dashboard"
+              description="A web application to manage products sold via a telegram bot"
+            />
 
             <UnsavedChangesNotifier />
 
-            <DefaultSeo
-              title="Bot Frontend"
-              description="A web application to manage products sold via a telegram bot"
-            />
+            {renderComponent()}
           </Refine>
         </NotificationsProvider>
       </MantineProvider>
