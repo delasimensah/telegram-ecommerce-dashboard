@@ -110,7 +110,7 @@ const ListProducts = () => {
   return (
     <List canCreate={false}>
       {!products.length ? (
-        <Empty text="no categories available" />
+        <Empty text="no products available" />
       ) : (
         <Table
           getHeaderGroups={getHeaderGroups}
