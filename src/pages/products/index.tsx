@@ -104,31 +104,24 @@ const ListProducts = () => {
   const products = data?.data ?? [];
   // const total = data?.total ?? 0
 
-  let content = null;
+  isLoading && <Loading />;
+  isError && <Error />;
 
-  if (isLoading) {
-    content = <Loading />;
-  }
-
-  if (isError) {
-    content = <Error />;
-  }
-
-  if (!products.length) {
-    content = <Empty text="no products available" />;
-  } else {
-    content = (
-      <Table
-        getHeaderGroups={getHeaderGroups}
-        getRowModel={getRowModel}
-        pageCount={pageCount}
-        current={current}
-        setCurrent={setCurrent}
-      />
-    );
-  }
-
-  return <List>{content}</List>;
+  return (
+    <List canCreate={false}>
+      {!products.length ? (
+        <Empty text="no categories available" />
+      ) : (
+        <Table
+          getHeaderGroups={getHeaderGroups}
+          getRowModel={getRowModel}
+          pageCount={pageCount}
+          current={current}
+          setCurrent={setCurrent}
+        />
+      )}
+    </List>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

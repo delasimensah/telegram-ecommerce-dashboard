@@ -1,12 +1,9 @@
-import { Center, Title } from "@mantine/core";
-import React from "react";
+import { Center, Loader } from "@mantine/core";
 
 const Loading = () => {
   return (
     <Center mih="150px">
-      <Title order={4} fw={700}>
-        Loading...
-      </Title>
+      <Loader />
     </Center>
   );
 };

@@ -7,11 +7,11 @@ import {
   notificationProvider,
 } from "@refinedev/mantine";
 import routerProvider, {
-  DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/nextjs-router";
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
+import { DefaultSeo } from "next-seo";
 
 import { Header } from "@components";
 import {
@@ -139,20 +139,9 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
 
             <UnsavedChangesNotifier />
 
-            <DocumentTitleHandler
-              handler={({ pathname, resource }) => {
-                let title = "Bot Frontend";
-
-                if (pathname !== "/login") {
-                  title = `${resource?.name
-                    .charAt(0)
-                    .toUpperCase()}${resource?.name.substring(
-                    1
-                  )} | Bot Frontend`;
-                }
-
-                return title;
-              }}
+            <DefaultSeo
+              title="Bot Frontend"
+              description="A web application to manage products sold via a telegram bot"
             />
           </Refine>
         </NotificationsProvider>
