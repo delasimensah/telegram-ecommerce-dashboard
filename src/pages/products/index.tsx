@@ -4,6 +4,7 @@ import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group, Avatar, Text, Badge } from "@mantine/core";
 import { List, EditButton, DeleteButton } from "@refinedev/mantine";
+import millify from "millify";
 
 import { authProvider } from "@lib/authProvider";
 import { Product, Price } from "@lib/types";
@@ -24,7 +25,14 @@ const ListProducts = () => {
 
           return (
             <Group>
-              <Avatar size="lg" src={product?.photo} />
+              <Avatar
+                sx={(theme) => ({
+                  backgroundColor: `1px solid ${theme.colors.dark[6]}`,
+                })}
+                color="dark.6"
+                size="lg"
+                src={product?.photo}
+              />
               <Text fw={500}>{product?.name}</Text>
             </Group>
           );
@@ -51,7 +59,10 @@ const ListProducts = () => {
 
           return (
             <Text fz="sm" fw={700}>
-              GH₵{value[0].amount.toFixed(2)}
+              GH₵{" "}
+              {millify(value[0].amount, {
+                precision: 3,
+              })}
             </Text>
           );
         },
@@ -81,8 +92,16 @@ const ListProducts = () => {
         cell: ({ getValue }) => {
           return (
             <Group spacing="xs" noWrap>
-              <EditButton hideText recordItemId={getValue() as string} />
-              <DeleteButton hideText recordItemId={getValue() as string} />
+              <EditButton
+                variant="subtle"
+                hideText
+                recordItemId={getValue() as string}
+              />
+              <DeleteButton
+                variant="subtle"
+                hideText
+                recordItemId={getValue() as string}
+              />
             </Group>
           );
         },

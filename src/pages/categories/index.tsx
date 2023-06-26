@@ -31,8 +31,16 @@ const ListCategories = () => {
         cell: function render({ getValue }) {
           return (
             <Group spacing="xs" noWrap>
-              <EditButton hideText recordItemId={getValue() as string} />
-              <DeleteButton hideText recordItemId={getValue() as string} />
+              <EditButton
+                variant="subtle"
+                hideText
+                recordItemId={getValue() as string}
+              />
+              <DeleteButton
+                variant="subtle"
+                hideText
+                recordItemId={getValue() as string}
+              />
             </Group>
           );
         },

@@ -20,7 +20,7 @@ const Table: FC<TableProps> = ({
   return (
     <>
       <ScrollArea>
-        <MantineTable highlightOnHover striped verticalSpacing="md">
+        <MantineTable highlightOnHover striped verticalSpacing="sm">
           <thead>
             {getHeaderGroups().map((headerGroup) => {
               return (

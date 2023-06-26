@@ -150,7 +150,6 @@ const CreateProduct = () => {
           {values.prices.map((_, index) => (
             <Group align="center" key={index}>
               <NumberInput
-                hideControls
                 label="Quantity"
                 {...getInputProps(`prices.${index}.quantity`)}
               />
