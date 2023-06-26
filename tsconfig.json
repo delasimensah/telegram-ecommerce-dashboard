@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
+      "@components": ["src/components/index.ts"],
       "@lib/*": ["src/lib/*"],
       "@public/*": ["public/*"]
     },

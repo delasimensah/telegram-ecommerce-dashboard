@@ -1,38 +1,13 @@
 import { useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useTable } from "@refinedev/react-table";
-import { ColumnDef, flexRender } from "@tanstack/react-table";
-import {
-  ScrollArea,
-  Table,
-  Pagination,
-  Group,
-  Avatar,
-  Text,
-  Badge,
-  Center,
-  Title,
-} from "@mantine/core";
+import { ColumnDef } from "@tanstack/react-table";
+import { Group, Avatar, Text, Badge } from "@mantine/core";
 import { List, EditButton, DeleteButton } from "@refinedev/mantine";
 
 import { authProvider } from "@lib/authProvider";
-
-type Price = {
-  name: string;
-  price: number;
-};
-
-type Name = {
-  name: string;
-  photo: string;
-};
-
-type Product = {
-  name: Name;
-  category: string;
-  description: string;
-  prices: Price[];
-};
+import { Product, Price } from "@lib/types";
+import { Table, Loading, Error, Empty } from "@components";
 
 const ListProducts = () => {
   const columns = useMemo<ColumnDef<Product>[]>(() => {
@@ -41,13 +16,16 @@ const ListProducts = () => {
         id: "name",
         header: "Name",
         accessorKey: "name",
-        cell: ({ getValue }) => {
-          const value = getValue() as Name;
+        cell: ({ getValue, table }) => {
+          const value = getValue() as string;
+          const data = table.options.data;
+
+          const product = data.find((item) => item.name === value);
 
           return (
             <Group>
-              <Avatar size="lg" src={value.photo} />
-              <Text fw={500}>{value.name}</Text>
+              <Avatar size="lg" src={product?.photo} />
+              <Text fw={500}>{product?.name}</Text>
             </Group>
           );
         },
@@ -58,7 +36,7 @@ const ListProducts = () => {
         accessorKey: "category",
         cell: ({ getValue }) => {
           return (
-            <Badge color="yellow" size="md">
+            <Badge tt="capitalize" color="yellow" size="md">
               {getValue() as string}
             </Badge>
           );
@@ -73,7 +51,7 @@ const ListProducts = () => {
 
           return (
             <Text fz="sm" fw={700}>
-              GH₵{value[0].price.toFixed(2)}
+              GH₵{value[0].amount.toFixed(2)}
             </Text>
           );
         },
@@ -119,78 +97,38 @@ const ListProducts = () => {
       pageCount,
       current,
       setCurrent,
-      tableQueryResult: { data },
+      tableQueryResult: { data, isLoading, isError },
     },
   } = useTable({ columns });
 
   const products = data?.data ?? [];
   // const total = data?.total ?? 0
 
-  return (
-    <List>
-      {products.length ? (
-        <>
-          <ScrollArea>
-            <Table highlightOnHover striped verticalSpacing="md">
-              <thead>
-                {getHeaderGroups().map((headerGroup) => {
-                  return (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <th key={header.id}>
-                            {!header.isPlaceholder &&
-                              flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </thead>
+  let content = null;
 
-              <tbody>
-                {getRowModel().rows.map((row) => {
-                  return (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => {
-                        return (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </ScrollArea>
+  if (isLoading) {
+    content = <Loading />;
+  }
 
-          <br />
+  if (isError) {
+    content = <Error />;
+  }
 
-          <Pagination
-            position="right"
-            total={pageCount}
-            page={current}
-            onChange={setCurrent}
-          />
-        </>
-      ) : (
-        <Center mih="150px">
-          <Title order={4} fw={700}>
-            No Products Available
-          </Title>
-        </Center>
-      )}
-    </List>
-  );
+  if (!products.length) {
+    content = <Empty text="no products available" />;
+  } else {
+    content = (
+      <Table
+        getHeaderGroups={getHeaderGroups}
+        getRowModel={getRowModel}
+        pageCount={pageCount}
+        current={current}
+        setCurrent={setCurrent}
+      />
+    );
+  }
+
+  return <List>{content}</List>;
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

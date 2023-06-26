@@ -73,12 +73,13 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           >
             {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
           </ActionIcon>
-          {(user?.name || user?.avatar) && (
-            <Group spacing="xs">
-              {user?.name && <Title order={6}>{user?.name}</Title>}
-              <Avatar src={user?.avatar} alt={user?.name} radius="xl" />
-            </Group>
-          )}
+
+          <Group spacing="xs">
+            <Avatar color="cyan" radius="xl">
+              BA
+            </Avatar>
+            <Title order={6}>Bot Administrator</Title>
+          </Group>
         </Group>
       </Flex>
     </MantineHeader>

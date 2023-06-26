@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { GetServerSideProps } from "next";
-import { useList } from "@refinedev/core";
-import { Create, useForm } from "@refinedev/mantine";
+import { Create, useForm, useSelect } from "@refinedev/mantine";
 import {
   TextInput,
   Textarea,
@@ -21,6 +20,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { authProvider } from "@lib/authProvider";
 import { storage } from "@lib/firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { Category } from "@lib/types";
 
 const CreateProduct = () => {
   const [progress, setProgress] = useState(0);
@@ -28,19 +28,18 @@ const CreateProduct = () => {
   const {
     getInputProps,
     saveButtonProps,
-    refineCore: { formLoading, onFinish, redirect },
+    refineCore: { formLoading },
     insertListItem,
     removeListItem,
     values,
     setFieldValue,
-    validate,
   } = useForm({
     initialValues: {
       photo: "",
       name: "",
       description: "",
       category: "",
-      prices: [{ name: "", price: 0 }],
+      prices: [{ quantity: 0, amount: 0 }],
     },
     validate: {
       photo: (value) => (value.length < 1 ? "Please upload an image" : null),
@@ -50,17 +49,17 @@ const CreateProduct = () => {
       category: (value) =>
         value.length < 1 ? "Please choose a category" : null,
       prices: {
-        name: (value) => (value.length < 2 ? "Price name is required" : null),
-        price: (value) => (value < 1 ? "Price amount is required" : null),
+        quantity: (value) => (value < 1 ? "Ouantity is required" : null),
+        amount: (value) => (value < 1 ? "Amount is required" : null),
       },
     },
   });
 
-  const { data } = useList({
+  const { selectProps } = useSelect<Category>({
     resource: "categories",
+    optionLabel: "name",
+    optionValue: "name",
   });
-
-  const categories = data?.data ?? [];
 
   const handleOnChange = async (payload: File | null) => {
     const storageRef = ref(storage, payload?.name);
@@ -133,36 +132,33 @@ const CreateProduct = () => {
 
         {progress > 0 && <Progress size="xs" value={progress} />}
 
-        <TextInput placeholder="Product Name" {...getInputProps("name")} />
+        <TextInput label="Product Name" {...getInputProps("name")} />
 
         <Textarea
-          placeholder="Product Description"
+          label="Product Description"
           minRows={6}
           {...getInputProps("description")}
         />
 
         <Select
-          placeholder="Choose Category"
-          data={categories
-            .filter((c) => c.active === true)
-            .map((cat) => {
-              return { value: cat.name, label: cat.name };
-            })}
+          label="Choose Category"
           {...getInputProps("category")}
+          {...selectProps}
         />
 
         <>
           {values.prices.map((_, index) => (
-            <Group key={index}>
-              <TextInput
-                placeholder="Price Name"
-                {...getInputProps(`prices.${index}.name`)}
+            <Group align="center" key={index}>
+              <NumberInput
+                hideControls
+                label="Quantity"
+                {...getInputProps(`prices.${index}.quantity`)}
               />
               <NumberInput
                 defaultValue={0}
-                placeholder="Price Amount"
+                label="Amount"
                 hideControls
-                {...getInputProps(`prices.${index}.price`)}
+                {...getInputProps(`prices.${index}.amount`)}
               />
               <ActionIcon
                 color="red"

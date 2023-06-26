@@ -12,7 +12,7 @@ const EditCategory = () => {
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Stack>
-        <TextInput mt="sm" label="Name" {...getInputProps("name")} />
+        {/* <TextInput mt="sm" label="Name" {...getInputProps("name")} /> */}
 
         <Select
           label="Active"

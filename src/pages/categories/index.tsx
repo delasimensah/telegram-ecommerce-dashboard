@@ -1,19 +1,12 @@
 import { useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useTable } from "@refinedev/react-table";
-import { ColumnDef, flexRender } from "@tanstack/react-table";
-import {
-  ScrollArea,
-  Table,
-  Pagination,
-  Group,
-  Switch,
-  Center,
-  Title,
-} from "@mantine/core";
+import { ColumnDef } from "@tanstack/react-table";
+import { Group, Switch } from "@mantine/core";
 import { List, EditButton, DeleteButton } from "@refinedev/mantine";
 
 import { authProvider } from "@lib/authProvider";
+import { Table, Loading, Error, Empty } from "@components";
 
 const ListCategories = () => {
   const columns = useMemo<ColumnDef<any>[]>(() => {
@@ -54,78 +47,38 @@ const ListCategories = () => {
       pageCount,
       current,
       setCurrent,
-      tableQueryResult: { data },
+      tableQueryResult: { data, isLoading, isError },
     },
   } = useTable({ columns });
 
   const categories = data?.data ?? [];
   // const total = data?.total ?? 0;
 
-  return (
-    <List>
-      {categories.length ? (
-        <>
-          <ScrollArea>
-            <Table highlightOnHover striped verticalSpacing="md">
-              <thead>
-                {getHeaderGroups().map((headerGroup) => {
-                  return (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <th key={header.id}>
-                            {!header.isPlaceholder &&
-                              flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </thead>
+  let content = null;
 
-              <tbody>
-                {getRowModel().rows.map((row) => {
-                  return (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => {
-                        return (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </ScrollArea>
+  if (isLoading) {
+    content = <Loading />;
+  }
 
-          <br />
+  if (isError) {
+    content = <Error />;
+  }
 
-          <Pagination
-            position="right"
-            total={pageCount}
-            page={current}
-            onChange={setCurrent}
-          />
-        </>
-      ) : (
-        <Center mih="150px">
-          <Title order={4} fw={700}>
-            No Categories Available.
-          </Title>
-        </Center>
-      )}
-    </List>
-  );
+  if (!categories.length) {
+    content = <Empty text="no categories available" />;
+  } else {
+    content = (
+      <Table
+        getHeaderGroups={getHeaderGroups}
+        getRowModel={getRowModel}
+        pageCount={pageCount}
+        current={current}
+        setCurrent={setCurrent}
+      />
+    );
+  }
+
+  return <List>{content}</List>;
 };
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
