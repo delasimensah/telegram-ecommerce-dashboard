@@ -10,6 +10,8 @@ export type User = {
   contactNumber?: string;
   createdAt?: string;
   blocked?: boolean;
+  totalOrders?: number;
+  amountSpent?: number;
 };
 
 export type Price = {
@@ -42,11 +44,11 @@ export type Order = {
   contactNumber: string;
   deliveryLocation: Location;
   paymentMethod: string;
-  fulfilled?: boolean;
-  cancelled?: boolean;
   products: CartProduct[];
   total: number;
   createdAt?: string;
+  paymentStatus: "paid" | "unpaid";
+  orderStatus: "pending" | "confirmed" | "cancelled";
 };
 
 export type CartProduct = {

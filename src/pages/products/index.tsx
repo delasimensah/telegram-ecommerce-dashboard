@@ -123,8 +123,8 @@ const ListProducts = () => {
   const products = data?.data ?? [];
   // const total = data?.total ?? 0
 
-  isLoading && <Loading />;
-  isError && <Error />;
+  if (isError) return <Error />;
+  if (isLoading) return <Loading />;
 
   return (
     <List>
