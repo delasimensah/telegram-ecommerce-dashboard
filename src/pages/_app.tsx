@@ -80,7 +80,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
     >
       <MantineProvider
         theme={{
-          ...RefineThemes.Green,
+          ...RefineThemes.Purple,
           ...theme,
           colorScheme: colorScheme,
         }}
@@ -122,6 +122,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
               {
                 name: "orders",
                 list: "/orders",
+                show: "/orders/show/:id",
                 meta: {
                   icon: <FaInbox />,
                 },

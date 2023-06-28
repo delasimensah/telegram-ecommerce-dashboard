@@ -39,6 +39,7 @@ export type Category = {
 
 export type Order = {
   id?: string | number;
+  orderNumber?: number;
   userId: string | number;
   username: string;
   contactNumber: string;
@@ -53,6 +54,7 @@ export type Order = {
 
 export type CartProduct = {
   id?: string;
+  photo?: string;
   name: string;
   quantity: number;
   amount: number;

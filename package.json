@@ -26,6 +26,7 @@
     "@refinedev/react-table": "^5.1.4",
     "@refinedev/simple-rest": "^4.0.0",
     "@tabler/icons": "^1.1.0",
+    "axios": "^1.4.0",
     "dayjs": "^1.11.8",
     "firebase": "^9.22.2",
     "millify": "^6.1.0",

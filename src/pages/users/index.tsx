@@ -1,15 +1,43 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { GetServerSideProps } from "next";
+import millify from "millify";
+import axios from "axios";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Group, Avatar, Text, Button, Badge } from "@mantine/core";
-import { List } from "@refinedev/mantine";
+import { useModal } from "@refinedev/core";
+import { List, useForm } from "@refinedev/mantine";
+import {
+  Group,
+  Avatar,
+  Text,
+  Button,
+  Badge,
+  Modal,
+  Textarea,
+  Stack,
+  Title,
+} from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+
 import { authProvider } from "@lib/authProvider";
-import { Table, Loading, Error, Empty } from "@components";
+import { Table, Loading, Error, Empty, BlockButton } from "@components";
 import { User } from "@lib/types";
-import millify from "millify";
 
 const ListUsers = () => {
+  const [id, setId] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const { visible, show, close } = useModal();
+
+  const { getInputProps, validate, setFieldValue, values } = useForm({
+    initialValues: {
+      message: "",
+    },
+    validate: {
+      message: (value) => (value.length < 2 ? "Message is too short" : null),
+    },
+  });
+
   const columns = useMemo<ColumnDef<User>[]>(() => {
     return [
       {
@@ -29,7 +57,7 @@ const ListUsers = () => {
 
           return (
             <Group>
-              <Avatar color="green.6" size="md" radius="lg">
+              <Avatar color="primary" size="md" radius="xl">
                 {user?.firstName?.charAt(0)}
               </Avatar>
               <Text fw={500}>{user?.firstName}</Text>
@@ -81,15 +109,18 @@ const ListUsers = () => {
         id: "actions",
         header: "Actions",
         accessorKey: "id",
-        cell: ({ getValue }) => {
+        cell: ({ getValue, table }) => {
           const value = getValue() as string;
+          const data = table.options.data;
+
+          const user = data.find((item) => item.id === value);
+          const isBlocked = user?.blocked as boolean;
 
           return (
             <Group spacing="xs" noWrap>
-              <Button size="xs" color="red" onClick={() => updateUser(value)}>
-                Block User
-              </Button>
-              <Button size="xs" onClick={() => sendMessage(value)}>
+              <BlockButton blocked={isBlocked} id={value} />
+
+              <Button size="xs" onClick={() => openMessageModal(value)}>
                 Send Message
               </Button>
             </Group>
@@ -110,22 +141,87 @@ const ListUsers = () => {
     },
   } = useTable({ columns });
 
-  async function updateUser(id: string) {
-    console.log("block user: ", id);
-  }
-
-  async function sendMessage(id: string) {
-    console.log("send message to: ", id);
-  }
-
   const users = data?.data ?? [];
-  // const total = data?.total ?? 0;
+  const total = data?.total ?? 0;
+
+  async function openMessageModal(id: string) {
+    show();
+    setId(id);
+  }
+
+  async function closeMessageModal() {
+    close(), setFieldValue("message", "");
+  }
+
+  async function sendMessage() {
+    const { hasErrors } = validate();
+
+    if (hasErrors) return;
+
+    setSending(true);
+
+    try {
+      if (id) {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}/sendMessage`,
+          {
+            chat_id: id,
+            text: values.message,
+          }
+        );
+
+        setSending(false);
+
+        showNotification({
+          message: `Message to ${id} sent`,
+          color: "green",
+        });
+      } else {
+        await Promise.all(
+          users.map((user) => {
+            axios.post(
+              `${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}/sendMessage`,
+              {
+                chat_id: user.id,
+                text: values.message,
+              }
+            );
+          })
+        );
+
+        setSending(false);
+
+        showNotification({
+          message: `Broadcast message sent`,
+          color: "green",
+        });
+      }
+      closeMessageModal();
+    } catch (error) {
+      console.log(error);
+      setSending(false);
+      showNotification({
+        message: "An error occurred sending the message. Try again",
+      });
+    }
+  }
 
   if (isError) return <Error />;
   if (isLoading) return <Loading />;
 
   return (
-    <List canCreate={false}>
+    <List
+      title={
+        <Title order={3}>
+          {" "}
+          {total} User{total > 2 ? "s" : ""}
+        </Title>
+      }
+      canCreate={false}
+      headerButtons={
+        <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
+      }
+    >
       {!users.length ? (
         <Empty text="no users available" />
       ) : (
@@ -137,6 +233,19 @@ const ListUsers = () => {
           setCurrent={setCurrent}
         />
       )}
+
+      <Modal
+        opened={visible}
+        onClose={closeMessageModal}
+        title={id ? "Send User Message" : "Send Broadcast Message"}
+      >
+        <Stack>
+          <Textarea {...getInputProps("message")} />
+          <Button loading={sending} onClick={sendMessage}>
+            Send Message
+          </Button>
+        </Stack>
+      </Modal>
     </List>
   );
 };
