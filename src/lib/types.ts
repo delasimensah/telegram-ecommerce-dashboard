@@ -1,10 +1,7 @@
 export type User = {
   id: string | number;
-  firstName: string | undefined;
-  lastName: string | null;
-  username: string | null;
+  username: string | undefined;
   chatSession?: boolean;
-  currency?: string;
   paymentMethod?: string;
   deliveryLocation?: Location;
   contactNumber?: string;
@@ -61,12 +58,14 @@ export type CartProduct = {
 };
 
 export type Vendor = {
-  id: string | number;
-  currency: string;
-  chatSession: boolean;
-  mobileMoneyNumber?: string;
-  mobileMoneyName?: string;
+  id?: string;
+  currency?: string;
+  chatSession?: boolean;
+  mobileMoneyNumber: string;
+  mobileMoneyName: string;
+  storeName: string;
   createdAt?: string;
+  active: boolean;
 };
 
 export type Location = {

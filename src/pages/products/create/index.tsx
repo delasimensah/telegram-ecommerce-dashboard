@@ -47,7 +47,7 @@ const CreateProduct = () => {
       description: (value) =>
         value.length < 1 ? "Product description is required" : null,
       category: (value) =>
-        value.length < 1 ? "Please choose a category" : null,
+        value?.length < 1 ? "Please choose a category" : null,
       prices: {
         quantity: (value) => (value < 1 ? "Ouantity is required" : null),
         amount: (value) => (value < 1 ? "Amount is required" : null),

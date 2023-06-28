@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { GetServerSideProps } from "next";
 import millify from "millify";
-import axios from "axios";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useModal } from "@refinedev/core";
@@ -15,17 +14,18 @@ import {
   Modal,
   Textarea,
   Stack,
-  Title,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 
 import { authProvider } from "@lib/authProvider";
 import { Table, Loading, Error, Empty, BlockButton } from "@components";
 import { User } from "@lib/types";
+import { sendBotMessage, sendInviteBroadcast } from "@lib/bot-requests";
 
 const ListUsers = () => {
   const [id, setId] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendingInvite, setSendingInvite] = useState(false);
 
   const { visible, show, close } = useModal();
 
@@ -58,9 +58,9 @@ const ListUsers = () => {
           return (
             <Group>
               <Avatar color="primary" size="md" radius="xl">
-                {user?.firstName?.charAt(0)}
+                {user?.username?.charAt(0)}
               </Avatar>
-              <Text fw={500}>{user?.firstName}</Text>
+              <Text fw={500}>{user?.username}</Text>
             </Group>
           );
         },
@@ -142,7 +142,7 @@ const ListUsers = () => {
   } = useTable({ columns });
 
   const users = data?.data ?? [];
-  const total = data?.total ?? 0;
+  // const total = data?.total ?? 0;
 
   async function openMessageModal(id: string) {
     show();
@@ -162,13 +162,7 @@ const ListUsers = () => {
 
     try {
       if (id) {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}/sendMessage`,
-          {
-            chat_id: id,
-            text: values.message,
-          }
-        );
+        await sendBotMessage(id, values.message);
 
         setSending(false);
 
@@ -179,13 +173,7 @@ const ListUsers = () => {
       } else {
         await Promise.all(
           users.map((user) => {
-            axios.post(
-              `${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}/sendMessage`,
-              {
-                chat_id: user.id,
-                text: values.message,
-              }
-            );
+            sendBotMessage(user?.id as string, values.message);
           })
         );
 
@@ -206,20 +194,39 @@ const ListUsers = () => {
     }
   }
 
+  async function sendInvite() {
+    setSendingInvite(true);
+    try {
+      await Promise.all(
+        users.map((user) => {
+          sendInviteBroadcast(user?.id as string);
+        })
+      );
+
+      showNotification({
+        message: `Invite broadcast sent`,
+        color: "green",
+      });
+
+      setSendingInvite(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   if (isError) return <Error />;
   if (isLoading) return <Loading />;
 
   return (
     <List
-      title={
-        <Title order={3}>
-          {" "}
-          {total} User{total > 2 ? "s" : ""}
-        </Title>
-      }
       canCreate={false}
       headerButtons={
-        <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
+        <Group>
+          <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
+          <Button loading={sendingInvite} onClick={sendInvite} color="green">
+            Send Invite
+          </Button>
+        </Group>
       }
     >
       {!users.length ? (

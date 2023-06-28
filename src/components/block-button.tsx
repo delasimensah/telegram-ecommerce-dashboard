@@ -32,7 +32,7 @@ const BlockButton: FC<BlockBottonProps> = ({ blocked, id }) => {
       zIndex={1000}
     >
       <Menu.Target>
-        <Button size="xs" color={blocked ? "teal" : "red"} loading={isLoading}>
+        <Button size="xs" color={blocked ? "green" : "red"} loading={isLoading}>
           {blocked ? "Unblock User" : "Block User"}
         </Button>
       </Menu.Target>
@@ -42,19 +42,18 @@ const BlockButton: FC<BlockBottonProps> = ({ blocked, id }) => {
           padding: "10px",
         }}
       >
-        {/* <Menu.Label>Are you sure?</Menu.Label> */}
         <Group>
           <Button
             onClick={() => setOpened(false)}
             variant="outline"
-            color="gray"
+            color="red"
             size="xs"
           >
-            Cancel
+            No
           </Button>
 
           <Button
-            color={blocked ? "teal" : "red"}
+            color="green"
             size="xs"
             onClick={() => {
               if (blocked) {
@@ -64,7 +63,7 @@ const BlockButton: FC<BlockBottonProps> = ({ blocked, id }) => {
               }
             }}
           >
-            {blocked ? "Unblock" : "Block"}
+            Yes
           </Button>
         </Group>
       </Menu.Dropdown>

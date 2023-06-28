@@ -24,7 +24,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@refinedev/simple-rest";
 import { authProvider } from "@lib/authProvider";
 
-import { FaUsers, FaTags, FaInbox } from "react-icons/fa";
+import { FaUsers, FaTags, FaInbox, FaStore } from "react-icons/fa";
 
 import theme from "@lib/mantineTheme";
 
@@ -95,21 +95,21 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
             authProvider={authProvider}
             resources={[
               {
-                name: "products",
-                list: "/products",
-                create: "/products/create",
-                edit: "/products/edit/:id",
-                meta: {
-                  icon: <FaTags />,
-                },
-              },
-              {
                 name: "categories",
                 list: "/categories",
                 create: "/categories/create",
                 edit: "/categories/edit/:id",
                 meta: {
                   canDelete: true,
+                },
+              },
+              {
+                name: "products",
+                list: "/products",
+                create: "/products/create",
+                edit: "/products/edit/:id",
+                meta: {
+                  icon: <FaTags />,
                 },
               },
               {
@@ -125,6 +125,16 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
                 show: "/orders/show/:id",
                 meta: {
                   icon: <FaInbox />,
+                },
+              },
+              {
+                name: "vendors",
+                list: "/vendors",
+                create: "/vendors/create",
+                edit: "/vendors/edit/:id",
+                meta: {
+                  icon: <FaStore />,
+                  label: "Store Details",
                 },
               },
             ]}

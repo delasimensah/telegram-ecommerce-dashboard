@@ -1,55 +1,15 @@
 import React from "react";
 import dayjs from "dayjs";
-import {
-  Show,
-  NumberField,
-  TextField,
-  MarkdownField,
-  TagField,
-  DateField,
-} from "@refinedev/mantine";
-import { useShow, useUpdate } from "@refinedev/core";
-import {
-  Title,
-  Group,
-  Text,
-  Button,
-  Card,
-  Stack,
-  Avatar,
-  Grid,
-  Box,
-  Badge,
-} from "@mantine/core";
+import { Show, NumberField } from "@refinedev/mantine";
+import { useShow } from "@refinedev/core";
+import { Title, Group, Text, Stack, Grid, Box, Badge } from "@mantine/core";
 import { Order } from "@lib/types";
+import { ConfirmOrderButton, CancelOrderButton } from "@components";
 
 const ShowOrder = () => {
-  const { mutate, isLoading: loading } = useUpdate();
   const { queryResult } = useShow();
   const { data, isLoading } = queryResult;
   const order = data?.data as Order;
-
-  const confirmOrder = () => {
-    mutate({
-      resource: "orders",
-      values: {
-        paymentStatus: "paid",
-        orderStatus: "confirmed",
-      },
-      id: order?.id as string,
-    });
-  };
-
-  const cancelOrder = () => {
-    mutate({
-      resource: "orders",
-      values: {
-        paymentStatus: "unpaid",
-        orderStatus: "cancelled",
-      },
-      id: order?.id as string,
-    });
-  };
 
   return (
     <Show
@@ -196,12 +156,21 @@ const ShowOrder = () => {
 
         <Grid.Col span={12}>
           <Group position="right">
-            <Button color="red" loading={loading} onClick={cancelOrder}>
-              Cancel Order
-            </Button>
-            <Button loading={loading} onClick={confirmOrder}>
-              Confirm Order
-            </Button>
+            {order?.orderStatus === "pending" &&
+              order?.paymentStatus === "unpaid" && (
+                <CancelOrderButton
+                  orderId={order?.id as string}
+                  userId={order?.userId as string}
+                />
+              )}
+
+            {order?.orderStatus === "pending" &&
+              order?.paymentStatus === "unpaid" && (
+                <ConfirmOrderButton
+                  orderId={order?.id as string}
+                  userId={order?.userId as string}
+                />
+              )}
           </Group>
         </Grid.Col>
       </Grid>
