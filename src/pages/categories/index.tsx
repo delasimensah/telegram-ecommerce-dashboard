@@ -7,9 +7,10 @@ import { List, EditButton, DeleteButton } from "@refinedev/mantine";
 
 import { authProvider } from "@lib/authProvider";
 import { Table, Loading, Error, Empty } from "@components";
+import { Category } from "@lib/types";
 
 const ListCategories = () => {
-  const columns = useMemo<ColumnDef<any>[]>(() => {
+  const columns = useMemo<ColumnDef<Category>[]>(() => {
     return [
       {
         id: "name",
@@ -21,7 +22,9 @@ const ListCategories = () => {
         header: "Active",
         accessorKey: "active",
         cell: ({ getValue }) => {
-          return <Switch checked={getValue() as boolean} size="md" />;
+          const value = getValue() as boolean;
+
+          return <Switch checked={value} size="lg" />;
         },
       },
       {
