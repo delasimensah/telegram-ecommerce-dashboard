@@ -24,7 +24,7 @@ const ListProducts = () => {
           const product = data.find((item) => item.name === value);
 
           return (
-            <Group>
+            <Group noWrap>
               <Avatar
                 sx={(theme) => ({
                   backgroundColor: `1px solid ${theme.colors.dark[6]}`,

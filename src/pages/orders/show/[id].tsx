@@ -134,8 +134,6 @@ const ShowOrder = () => {
                 return (
                   <Group grow key={product?.id}>
                     <Group noWrap>
-                      <Avatar color="indigo" src={product?.photo} size="lg" />
-
                       <Text size="sm" fw={700}>
                         {product?.name}
                       </Text>
