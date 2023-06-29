@@ -1,7 +1,8 @@
 import React from "react";
+import { List, EditButton, DeleteButton } from "@refinedev/mantine";
 
-const index = () => {
-  return <div>index</div>;
+const VendorList = () => {
+  return <List>index</List>;
 };
 
-export default index;
+export default VendorList;

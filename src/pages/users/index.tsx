@@ -20,12 +20,11 @@ import { showNotification } from "@mantine/notifications";
 import { authProvider } from "@lib/authProvider";
 import { Table, Loading, Error, Empty, BlockButton } from "@components";
 import { User } from "@lib/types";
-import { sendBotMessage, sendInviteBroadcast } from "@lib/bot-requests";
+import { sendBotMessage } from "@lib/bot-requests";
 
 const ListUsers = () => {
   const [id, setId] = useState("");
   const [sending, setSending] = useState(false);
-  const [sendingInvite, setSendingInvite] = useState(false);
 
   const { visible, show, close } = useModal();
 
@@ -139,7 +138,7 @@ const ListUsers = () => {
       setCurrent,
       tableQueryResult: { data, isLoading, isError },
     },
-  } = useTable({ columns });
+  } = useTable({ columns, refineCoreProps: { pagination: { mode: "off" } } });
 
   const users = data?.data ?? [];
   // const total = data?.total ?? 0;
@@ -194,26 +193,6 @@ const ListUsers = () => {
     }
   }
 
-  async function sendInvite() {
-    setSendingInvite(true);
-    try {
-      await Promise.all(
-        users.map((user) => {
-          sendInviteBroadcast(user?.id as string);
-        })
-      );
-
-      showNotification({
-        message: `Invite broadcast sent`,
-        color: "green",
-      });
-
-      setSendingInvite(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   if (isError) return <Error />;
   if (isLoading) return <Loading />;
 
@@ -221,12 +200,11 @@ const ListUsers = () => {
     <List
       canCreate={false}
       headerButtons={
-        <Group>
-          <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
-          <Button loading={sendingInvite} onClick={sendInvite} color="green">
-            Send Invite
-          </Button>
-        </Group>
+        <>
+          {users.length && (
+            <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
+          )}
+        </>
       }
     >
       {!users.length ? (

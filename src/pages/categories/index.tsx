@@ -60,7 +60,7 @@ const ListCategories = () => {
       setCurrent,
       tableQueryResult: { data, isLoading, isError },
     },
-  } = useTable({ columns });
+  } = useTable({ columns, refineCoreProps: { pagination: { mode: "off" } } });
 
   const categories = data?.data ?? [];
   // const total = data?.total ?? 0;

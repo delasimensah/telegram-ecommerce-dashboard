@@ -134,7 +134,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
                 edit: "/vendors/edit/:id",
                 meta: {
                   icon: <FaStore />,
-                  label: "Store Details",
+                  label: "Store",
                 },
               },
             ]}
