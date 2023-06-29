@@ -141,6 +141,7 @@ const ListUsers = () => {
   } = useTable({ columns, refineCoreProps: { pagination: { mode: "off" } } });
 
   const users = data?.data ?? [];
+  // const testUsers = ["1095070582", "921745333", "6075714878"];
   // const total = data?.total ?? 0;
 
   async function openMessageModal(id: string) {
@@ -193,6 +194,27 @@ const ListUsers = () => {
     }
   }
 
+  // async function sendInviteBC() {
+  //   setSending(true);
+
+  //   try {
+  //     await Promise.all(
+  //       testUsers.map((id) => {
+  //         sendBotMessage(id, "/start");
+  //       })
+  //     );
+
+  //     setSending(false);
+
+  //     showNotification({
+  //       message: `Invite broadcast message sent`,
+  //       color: "green",
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   if (isError) return <Error />;
   if (isLoading) return <Loading />;
 
@@ -201,9 +223,12 @@ const ListUsers = () => {
       canCreate={false}
       headerButtons={
         <>
-          {users.length && (
+          {users.length ? (
             <Button onClick={() => openMessageModal("")}>Send Broadcast</Button>
-          )}
+          ) : null}
+          {/* <Button onClick={sendInviteBC} loading={sending}>
+            Send Invite Broadcast
+          </Button> */}
         </>
       }
     >

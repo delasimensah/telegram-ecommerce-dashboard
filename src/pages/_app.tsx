@@ -129,9 +129,7 @@ const MyApp: FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
               },
               {
                 name: "vendors",
-                list: "/vendors",
-                create: "/vendors/create",
-                edit: "/vendors/edit/:id",
+                list: "/store",
                 meta: {
                   icon: <FaStore />,
                   label: "Store",
