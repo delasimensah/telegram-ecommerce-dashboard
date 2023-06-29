@@ -8,7 +8,7 @@ export default function Login() {
     <AuthPage
       type="login"
       formProps={{
-        initialValues: { email: "admin@bot.com", password: "BotAdmin!!" },
+        initialValues: { email: "bot@admin.com", password: "BotAdmin!!" },
       }}
       title={<></>}
       registerLink={<></>}
