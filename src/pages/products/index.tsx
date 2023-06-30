@@ -118,7 +118,14 @@ const ListProducts = () => {
       setCurrent,
       tableQueryResult: { data, isLoading, isError },
     },
-  } = useTable({ columns, refineCoreProps: { pagination: { mode: "off" } } });
+  } = useTable({
+    columns,
+    refineCoreProps: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
+  });
 
   const products = data?.data ?? [];
   // const total = data?.total ?? 0
