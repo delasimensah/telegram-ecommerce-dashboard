@@ -25,18 +25,20 @@ const VendorList = () => {
       saveButtonProps={saveButtonProps}
     >
       <Stack>
-        <TextInput mt="sm" label="Store Name" {...getInputProps("storeName")} />
+        <TextInput mt="sm" label="Store Name" {...getInputProps("storeName")} disabled/>
 
         <TextInput
           mt="sm"
           label="Mobile Money Name"
           {...getInputProps("mobileMoneyName")}
+          disabled
         />
 
         <TextInput
           mt="sm"
           label="Mobile Money Number"
           {...getInputProps("mobileMoneyNumber")}
+          disabled
         />
 
         <Select
@@ -47,6 +49,7 @@ const VendorList = () => {
           ]}
           {...getInputProps("active")}
           value={String(getInputProps("active").value)}
+          disabled
         />
       </Stack>
     </Edit>
