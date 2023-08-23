@@ -30,7 +30,7 @@ const ListProducts = () => {
                   backgroundColor: `1px solid ${theme.colors.dark[6]}`,
                 })}
                 color="dark.6"
-                size="lg"
+                size="xl"
                 src={product?.photo}
               />
               <Text fw={500}>{product?.name}</Text>
