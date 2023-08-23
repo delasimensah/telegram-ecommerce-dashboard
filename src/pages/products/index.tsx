@@ -29,6 +29,11 @@ const ListProducts = () => {
                 sx={(theme) => ({
                   backgroundColor: `1px solid ${theme.colors.dark[6]}`,
                 })}
+                styles={{
+                  image:{
+                    objectFit:'contain'
+                  }
+                }}
                 color="dark.6"
                 size="lg"
                 src={product?.photo}
